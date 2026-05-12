@@ -4,6 +4,8 @@ import { getCurrentUser, signOut } from 'aws-amplify/auth';
 import { Hub } from 'aws-amplify/utils';
 import { AuthDialog } from './AuthDialog';
 import { useCart } from '../context/CartContext';
+import highlight from '@/imports/highlight-1.png';
+
 
 export function Navbar({ onCheckout }: { onCheckout: () => void }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -98,10 +100,10 @@ export function Navbar({ onCheckout }: { onCheckout: () => void }) {
         <div className="flex items-center gap-3">
           
             <img
-             src="https://keylink-media-kevin-123.s3.amazonaws.com/highlight.png"
-              alt="KeyLink Logo"
-              className="w-14 h-14"
-              />
+  src={highlight}
+  alt="KeyLink Logo"
+  className="w-14 h-14"
+/>
           <span className="text-3xl font-bold text-[#E2DCD6]">KeyLink</span>
         </div>
 
