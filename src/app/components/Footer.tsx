@@ -1,5 +1,6 @@
 import { Instagram, Twitter, Facebook, Mail, MapPin, Phone } from 'lucide-react';
 import garantiaPDF from '@/imports/pdf/Política de Garantía.pdf';
+import highlight from '@/imports/highlight-1.png';
 
 export function Footer() {
   return (
@@ -9,10 +10,10 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <img
-             src="https://keylink-media-kevin-123.s3.amazonaws.com/highlight.png"
-              alt="KeyLink Logo"
-              className="w-14 h-14"
-              />
+  src={highlight}
+  alt="KeyLink Logo"
+  className="w-14 h-14"
+/>
               <span className="text-2xl font-bold">KeyLink</span>
             </div>
             <p className="text-sm text-[#E2DCD6]/70 mb-4">
