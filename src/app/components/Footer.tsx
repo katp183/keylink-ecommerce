@@ -9,9 +9,9 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <img
-                src="/src/imports/highlight-1.png"
-                alt="KeyLink Logo"
-                className="w-10 h-10"
+             src="https://keylink-media-kevin-123.s3.amazonaws.com/highlight.png"
+              alt="KeyLink Logo"
+              className="w-14 h-14"
               />
               <span className="text-2xl font-bold">KeyLink</span>
             </div>
