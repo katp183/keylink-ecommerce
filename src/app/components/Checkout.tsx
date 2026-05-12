@@ -2,22 +2,40 @@ import { useState } from 'react';
 import { useCart } from '../context/CartContext';
 
 export function Checkout({ onBack }: { onBack: () => void }) {
-  const { cartItems } = useCart();
+  // 1. Extraemos processCheckout del contexto
+  const { cartItems, processCheckout } = useCart();
   const [fullName, setFullName] = useState('');
   const [address, setAddress] = useState('');
+  // 2. Agregamos un estado de carga para evitar que den doble clic al botón
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const subtotal = cartItems.reduce((total, item) => {
     const priceNumber = Number(item.price.replace(/[^0-9.-]+/g, ''));
     return total + priceNumber * item.quantity;
   }, 0);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  // 3. Volvemos la función asíncrona (async)
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    
     if (!fullName || !address) {
       alert('Por favor completa tu nombre y dirección de envío.');
       return;
     }
-    alert('Gracias por tu pedido. En este demo, el pago no está implementado.');
+
+    setIsProcessing(true); // Bloqueamos el botón mientras carga
+
+    // 4. Llamamos a la API a través de nuestro contexto
+    const result = await processCheckout();
+
+    setIsProcessing(false); // Desbloqueamos el botón
+
+    if (result.success) {
+      alert(`¡Pedido de KeyLink confirmado exitosamente!\nID de rastreo: ${result.id}`);
+      onBack(); // Regresamos al usuario al catálogo automáticamente
+    } else {
+      alert(`Ocurrió un problema: ${result.error}`);
+    }
   };
 
   return (
@@ -47,7 +65,8 @@ export function Checkout({ onBack }: { onBack: () => void }) {
                   value={fullName}
                   onChange={(event) => setFullName(event.target.value)}
                   placeholder="Tu nombre completo"
-                  className="mt-3 w-full rounded-3xl border border-white/10 bg-[#121212] px-4 py-4 text-white outline-none transition focus:border-[#5C00FF]"
+                  disabled={isProcessing}
+                  className="mt-3 w-full rounded-3xl border border-white/10 bg-[#121212] px-4 py-4 text-white outline-none transition focus:border-[#5C00FF] disabled:opacity-50"
                 />
               </label>
               <label className="block text-sm font-medium text-[#E2DCD6]/80">
@@ -57,15 +76,17 @@ export function Checkout({ onBack }: { onBack: () => void }) {
                   onChange={(event) => setAddress(event.target.value)}
                   placeholder="Calle, número, ciudad, estado"
                   rows={5}
-                  className="mt-3 w-full rounded-3xl border border-white/10 bg-[#121212] px-4 py-4 text-white outline-none transition focus:border-[#5C00FF]"
+                  disabled={isProcessing}
+                  className="mt-3 w-full rounded-3xl border border-white/10 bg-[#121212] px-4 py-4 text-white outline-none transition focus:border-[#5C00FF] disabled:opacity-50"
                 />
               </label>
 
               <button
                 type="submit"
-                className="w-full rounded-full bg-[#5C00FF] px-6 py-4 text-base font-semibold text-white transition hover:bg-[#2D0396]"
+                disabled={isProcessing}
+                className="w-full rounded-full bg-[#5C00FF] px-6 py-4 text-base font-semibold text-white transition hover:bg-[#2D0396] disabled:bg-[#5C00FF]/50 disabled:cursor-not-allowed flex justify-center items-center"
               >
-                Confirmar pedido
+                {isProcessing ? 'Procesando en la nube...' : 'Confirmar pedido'}
               </button>
             </form>
           </section>
